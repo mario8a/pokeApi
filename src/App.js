@@ -1,25 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react';
+import Pokedex from './lib/pokedex'
+import './styles/index.scss';
+//compoennts
+import { PokemonCards } from './components/PokemonCards';
 
 function App() {
+
+  const [pokemons, setPokemons] = useState([])
+
+  useEffect(() => {
+    Pokedex.getPokemonsList({limit: 20})
+      .then((PokeResponse) => {
+        // console.log(PokeResponse.results);
+        setPokemons(PokeResponse.results)
+      })
+  })
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <nav>
+        <img 
+          src="https://raw.githubusercontent.com/PokeAPI/media/master/logo/pokeapi_256.png" 
+          alt="PokeapiLogo"
+          className="logo"
+          />
+      </nav>
+      <main>
+        <section className="results">
+          {
+            pokemons.map((pokemon) => {
+              return <PokemonCards key={pokemon.name} name={pokemon.name}/>
+            })
+          }
+        </section>
+      </main>
+    </>
   );
 }
 
